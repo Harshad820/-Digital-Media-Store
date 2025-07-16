@@ -40,3 +40,5 @@ This repository includes the **Chinook Database**, a sample digital media store 
 This repository contains SQL queries and corresponding visualizations for analyzing the Movies Rental dataset.
 
 ## Queries and Visualizations
+
+(https://github.com/Harshad820/-Digital-Media-Store/blob/main/code%20file/1.png)
