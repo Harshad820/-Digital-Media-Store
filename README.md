@@ -1,4 +1,4 @@
-# -Digital-Media-Store
+#  Digital Media Store
 📊 Digital Media Store (Chinook Database) - SQL &amp; Analytics A complete MySQL database of a digital media store with a full schema, sample data, and a variety of SQL queries for analytics and reporting — from basic to advanced business insights.
 # Digital Media Store (Chinook Database) - SQL & Analytics
 
@@ -35,4 +35,8 @@ This repository includes the **Chinook Database**, a sample digital media store 
 - ✅ **Bonus (Subqueries & CTEs)**
 
 ## 🚀 Getting Started
-1. Clone the repository:
+#   Digital Media Store Queries
+
+This repository contains SQL queries and corresponding visualizations for analyzing the Movies Rental dataset.
+
+## Queries and Visualizations
