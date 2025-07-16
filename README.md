@@ -1,7 +1,7 @@
 #  Digital Media Store
 📊 Digital Media Store (Chinook Database) - SQL &amp; Analytics A complete MySQL database of a digital media store with a full schema, sample data, and a variety of SQL queries for analytics and reporting — from basic to advanced business insights.
 # Digital Media Store (Chinook Database) - SQL & Analytics
-
+![](https://github.com/Harshad820/-Digital-Media-Store/blob/main/code%20file/images.jpg)
 ## 📋 Overview
 This repository includes the **Chinook Database**, a sample digital media store database implemented in **MySQL**. It comes with:
 - Full database creation and data population script.
