@@ -1,0 +1,180 @@
+USE CHINOOK;
+
+-- ✅ Basic Analytics
+
+-- 1.	List all customers and their associated employee support representatives.
+
+SELECT C.CUSTOMERID,C.FIRSTNAME,C.LASTNAME,E.EMPLOYEEID,E.FIRSTNAME,E.LASTNAME
+FROM CUSTOMER AS C INNER JOIN EMPLOYEE AS E 
+ON C.SUPPORTREPID=E.EMPLOYEEID;
+
+
+
+-- 2. Retrieve all invoices with total amounts greater than $10
+
+SELECT * 
+FROM INVOICE
+WHERE TOTAL>10;
+
+
+-- 3. Show the number of customers per country.
+
+SELECT COUNTRY,COUNT(CUSTOMERID) AS NO_OF_CUSTOMER
+FROM CUSTOMER
+GROUP BY COUNTRY;
+
+
+-- 4. Get a list of all genres available in the database.
+
+
+SELECT * 
+FROM GENRE;
+
+
+
+-- 5.	Display all tracks that cost more than $0.99.
+
+SELECT *
+FROM TRACK
+WHERE UNITPRICE>0.99;
+
+
+-- ✅ Intermediate Analytics
+
+-- 6.	Find the top 5 customers who have spent the most.
+ 
+SELECT C.CUSTOMERID,C.FIRSTNAME,C.LASTNAME,SUM(TOTAL) AS SPEND_THE_MOST
+FROM INVOICE AS I LEFT JOIN CUSTOMER AS C
+ON I.CUSTOMERID=C.CUSTOMERID
+GROUP BY C.CUSTOMERID
+ORDER BY SPEND_THE_MOST DESC
+LIMIT 5;
+
+-- 7.	List all albums by a specific artist (e.g., "AC/DC").
+
+
+SELECT AT.ARTISTID,AT.NAME,A.ALBUMID,A.TITLE
+FROM ALBUM AS A INNER JOIN ARTIST AS AT
+ON A.ARTISTID=AT.ARTISTID
+WHERE AT.NAME="AC/DC";
+
+
+-- 8.	Display the total number of invoices per customer.
+
+SELECT C.CUSTOMERID,C.FIRSTNAME,C.LASTNAME,COUNT(INVOICEID)
+FROM INVOICE AS I INNER JOIN CUSTOMER AS C
+ON I.CUSTOMERID=C.CUSTOMERID
+GROUP BY C.CUSTOMERID;
+
+-- 9.	Show the names of employees who report to the same manager.
+
+SELECT * FROM EMPLOYEE;
+
+SELECT EP.EMPLOYEEID,EP.FIRSTNAME,EP.LASTNAME,E.EMPLOYEEID,E.FIRSTNAME,E.LASTNAME
+FROM EMPLOYEE AS E  JOIN EMPLOYEE AS EP
+ON E.EMPLOYEEID=EP.REPORTSTO;
+
+
+-- 10. Find the total quantity sold per track.
+ 
+ SELECT T.TRACKID,T.NAME,sum(IL.QUANTITY) AS QUENTITY
+ FROM  INVOICELINE AS IL INNER JOIN TRACK AS T 
+ ON IL.TRACKID=T.TRACKID
+ group by T.TRACKID;
+ 
+ 
+ -- 	✅ Advanced Analytics
+
+-- creating the view of invoice,invoiceline and track
+
+-- 11.	Which genre generates the highest revenue?
+
+SELECT 
+    G.GENREID,
+    G.NAME,
+    SUM(IL.QUANTITY * IL.UNITPRICE) AS REVENUE
+FROM
+    INVOICELINE AS IL
+        LEFT JOIN
+    TRACK AS T ON IL.TRACKID = T.TRACKID
+        LEFT JOIN
+    GENRE AS G ON T.GENREID = G.GENREID
+GROUP BY G.GENREID
+ORDER BY REVENUE DESC
+LIMIT 1;
+
+
+-- 12.	Which artist has the most tracks in the database?
+
+SELECT A.ARTISTID,A.NAME,COUNT(T.TRACKID) AS NO_OF_TRACK
+FROM ARTIST AS A LEFT JOIN ALBUM AS AB
+ON A.ARTISTID=AB.ARTISTID 
+LEFT JOIN TRACK AS T ON T.ALBUMID=AB.ALBUMID
+GROUP BY A.ARTISTID
+ORDER BY NO_OF_TRACK DESC
+LIMIT 1;
+
+
+-- 13.	Find the total sales per country, ordered by the highest sales.
+
+SELECT BILLINGCOUNTRY,SUM(TOTAL) AS SALES_PER_COUNTRY
+FROM INVOICE
+GROUP BY BILLINGCOUNTRY
+ORDER BY SALES_PER_COUNTRY DESC;
+
+
+-- 14.	Calculate the average invoice total per customer.
+
+SELECT I.CUSTOMERID,C.FIRSTNAME,C.LASTNAME,ROUND(AVG(TOTAL), 2)AS AVG_PER_CUSTOMER
+FROM INVOICE  AS I LEFT JOIN CUSTOMER AS C
+ON C.CUSTOMERID=I.CUSTOMERID 
+GROUP BY I.CUSTOMERID;
+
+
+-- 15.	Identify the customer who has purchased the most tracks (in quantity).
+
+SELECT I.CUSTOMERID,C.FIRSTNAME,C.LASTNAME,SUM(IL.QUANTITY)
+FROM CUSTOMER AS C INNER JOIN INVOICE AS I
+ON C.CUSTOMERID=I.CUSTOMERID
+INNER JOIN INVOICELINE AS IL 
+ON IL.INVOICEID=I.INVOICEID
+GROUP BY I.CUSTOMERID;
+
+-- ✅ Time-Based Analysis
+
+-- 16.	Retrieve monthly sales totals for each month in 2021.
+
+SELECT X.MONTH,SUM(TOTAL) AS SALES_TOTAL_PER_MONTH
+FROM (SELECT *,EXTRACT(MONTH FROM INVOICEDATE) AS MONTH ,EXTRACT(YEAR FROM INVOICEDATE) AS YEAR 
+FROM INVOICE) AS X
+WHERE YEAR="2021"
+GROUP BY X.MONTH;
+
+
+-- 17.	Find which year had the highest total sales.
+
+SELECT X.YEAR,SUM(TOTAL) AS SALES_PER_YEAR
+FROM(SELECT * ,EXTRACT(YEAR FROM INVOICEDATE) AS YEAR
+FROM INVOICE) AS X
+GROUP BY YEAR
+ORDER BY SALES_PER_YEAR DESC
+LIMIT 1;
+
+
+-- 18.	Display the hiring dates of employees alongside their first names.
+
+SELECT EMPLOYEEID,HIREDATE,FIRSTNAME
+FROM EMPLOYEE;
+
+-- ✅ Complex Joins and Aggregations
+
+-- 19.	List all playlists along with the number of tracks in each playlist.
+
+SELECT P.PLAYLISTID,P.NAME,COUNT(PT.TRACKID) AS NO_OF_TRACK
+FROM PLAYLIST AS P LEFT JOIN PLAYLISTTRACK AS PT 
+ON P.PLAYLISTID=PT.PLAYLISTID
+GROUP BY P.PLAYLISTID;
+
+
+-- 20.	For each customer, show the total amount spent and the total number of invoices.
+
